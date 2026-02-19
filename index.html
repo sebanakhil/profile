@@ -3,109 +3,1554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akhil Photography</title>
+<title>Marcus Vane — Architectural & Real Estate Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Jost:wght@200;300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #111;
-        color: white;
-        text-align: center;
-    }
+:root {
+  --cream: #f5f0e8;
+  --cream-dark: #ede5d4;
+  --ink: #1a1a14;
+  --forest: #2c3d2e;
+  --sage: #7a9478;
+  --gold: #b8924a;
+  --gold-light: #d4aa6a;
+  --warm-gray: #8a8478;
+  --white: #faf8f4;
+  --shadow: rgba(26,26,20,0.12);
+}
 
-    header {
-        padding: 40px 20px;
-        background: black;
-    }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-    header h1 {
-        font-size: 2.5rem;
-        margin: 0;
-        letter-spacing: 2px;
-    }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
 
-    header p {
-        color: #ccc;
-        margin-top: 10px;
-    }
+/* ── CURSOR ── */
+.cursor-dot {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform .08s;
+}
+.cursor-outline {
+  position: fixed; width: 32px; height: 32px;
+  border: 1px solid var(--forest);
+  border-radius: 50%; pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width .35s ease, height .35s ease, border-color .35s ease, background .35s ease;
+}
+.cursor-outline.expanded {
+  width: 80px; height: 80px;
+  background: rgba(44,61,46,.06);
+  border-color: var(--gold);
+}
+.cursor-outline.text-mode {
+  width: 64px; height: 64px;
+  background: var(--forest);
+  border-color: var(--forest);
+}
 
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 10px;
-        padding: 20px;
-    }
+/* ── NOISE TEXTURE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9990; opacity: .5;
+}
 
-    .gallery img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        border-radius: 8px;
-        transition: transform 0.3s ease;
-    }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28px 52px;
+  mix-blend-mode: multiply;
+}
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  letter-spacing: .04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-logo span { font-style: italic; color: var(--forest); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: .7rem; font-weight: 400;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  position: relative; opacity: .7;
+  transition: opacity .3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width .35s ease;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  font-size: .65rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--white);
+  background: var(--forest); border: none; padding: 12px 28px;
+  cursor: none; text-decoration: none;
+  transition: background .3s, transform .2s;
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--gold); transform: translateY(-1px); }
 
-    .gallery img:hover {
-        transform: scale(1.05);
-    }
+/* ── HERO ── */
+.hero {
+  height: 100vh; position: relative;
+  display: grid; grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
 
-    .about {
-        padding: 40px 20px;
-        background: #1a1a1a;
-    }
+.hero-left {
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 52px 80px;
+  position: relative; z-index: 2;
+  background: var(--cream);
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 14px;
+  font-size: .6rem; font-weight: 500; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+  opacity: 0; animation: fadeUp .9s ease .4s forwards;
+}
+.hero-eyebrow::before {
+  content: ''; display: block; width: 28px; height: 1px; background: var(--gold);
+}
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 6.5vw, 92px);
+  font-weight: 900; line-height: .92;
+  letter-spacing: -.01em; margin-bottom: 36px;
+  opacity: 0; animation: fadeUp 1s ease .6s forwards;
+}
+.hero-headline em {
+  font-style: italic; color: var(--forest);
+  font-weight: 400;
+}
+.hero-desc {
+  font-size: 1rem; line-height: 1.85; color: var(--warm-gray);
+  max-width: 380px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 1s ease .8s forwards;
+}
+.hero-actions {
+  display: flex; gap: 24px; align-items: center;
+  opacity: 0; animation: fadeUp 1s ease 1s forwards;
+}
+.btn-fill {
+  font-size: .65rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--white);
+  background: var(--forest); padding: 16px 40px;
+  text-decoration: none; display: inline-block;
+  transition: background .3s, transform .2s;
+}
+.btn-fill:hover { background: var(--gold); transform: translateY(-2px); }
+.btn-ghost {
+  font-size: .65rem; font-weight: 400; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--cream-dark);
+  padding-bottom: 4px;
+  transition: border-color .3s, color .3s;
+}
+.btn-ghost:hover { color: var(--forest); border-color: var(--forest); }
 
-    .contact {
-        padding: 40px 20px;
-    }
+.hero-right {
+  position: relative; overflow: hidden;
+}
+.hero-main-img {
+  width: 100%; height: 100%;
+  position: relative; overflow: hidden;
+  opacity: 0; animation: revealRight 1.2s cubic-bezier(.76,0,.24,1) .2s forwards;
+}
+@keyframes revealRight {
+  from { clip-path: inset(0 100% 0 0); opacity: 1; }
+  to { clip-path: inset(0 0% 0 0); opacity: 1; }
+}
 
-    .contact a {
-        color: #00bfff;
-        text-decoration: none;
-        font-weight: bold;
-    }
+.hero-floating-card {
+  position: absolute; bottom: 60px; left: -40px; z-index: 10;
+  background: var(--white); padding: 24px 28px;
+  box-shadow: 0 20px 60px var(--shadow);
+  width: 220px;
+  opacity: 0; animation: fadeUp 1s ease 1.2s forwards;
+}
+.hfc-label { font-size: .55rem; font-weight: 500; letter-spacing: .25em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.hfc-value { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; line-height: 1; color: var(--ink); margin-bottom: 4px; }
+.hfc-sub { font-size: .7rem; color: var(--warm-gray); }
 
-    footer {
-        padding: 20px;
-        background: black;
-        color: #777;
-        font-size: 0.9rem;
-    }
+.hero-counter {
+  position: absolute; right: 40px; bottom: 60px; z-index: 10;
+  text-align: right;
+  opacity: 0; animation: fadeUp 1s ease 1.4s forwards;
+}
+.hero-counter-current {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem; font-weight: 900; line-height: 1;
+  color: rgba(26,26,20,.12); cursor: pointer;
+}
+.hero-counter-total {
+  font-size: .6rem; letter-spacing: .2em; color: var(--warm-gray);
+}
+
+/* ── MARQUEE ── */
+.marquee-bar {
+  background: var(--forest); padding: 14px 0;
+  overflow: hidden; white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex; gap: 60px;
+  animation: marquee 25s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-item {
+  font-size: .6rem; font-weight: 400; letter-spacing: .3em;
+  text-transform: uppercase; color: rgba(245,240,232,.5);
+  display: flex; align-items: center; gap: 60px;
+}
+.marquee-item span { color: var(--gold-light); font-style: italic; font-family: 'DM Serif Display', serif; font-size: .9rem; letter-spacing: .05em; }
+
+/* ── SECTION SHARED ── */
+.section-label {
+  font-size: .58rem; font-weight: 500; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 700; line-height: 1.05;
+  letter-spacing: -.01em;
+}
+.section-title em { font-style: italic; color: var(--forest); font-weight: 400; }
+
+/* ── PORTFOLIO GRID ── */
+.portfolio-section { padding: 100px 52px; }
+.portfolio-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 60px;
+}
+
+/* Filter tabs */
+.filter-tabs { display: flex; gap: 4px; }
+.ftab {
+  font-size: .6rem; font-weight: 400; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--warm-gray);
+  background: none; border: 1px solid transparent;
+  padding: 8px 20px; cursor: none;
+  transition: all .3s;
+}
+.ftab.active {
+  color: var(--forest); border-color: var(--forest);
+  background: rgba(44,61,46,.06);
+}
+.ftab:hover { color: var(--forest); }
+
+/* Bento grid */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 320px 280px 360px;
+  gap: 6px;
+}
+.bento-item {
+  position: relative; overflow: hidden;
+  background: var(--cream-dark);
+  cursor: none;
+}
+.bento-item:nth-child(1) { grid-column: 1 / 8; grid-row: 1; }
+.bento-item:nth-child(2) { grid-column: 8 / 13; grid-row: 1; }
+.bento-item:nth-child(3) { grid-column: 1 / 5; grid-row: 2; }
+.bento-item:nth-child(4) { grid-column: 5 / 9; grid-row: 2; }
+.bento-item:nth-child(5) { grid-column: 9 / 13; grid-row: 2 / 4; }
+.bento-item:nth-child(6) { grid-column: 1 / 6; grid-row: 3; }
+.bento-item:nth-child(7) { grid-column: 6 / 9; grid-row: 3; }
+
+.bento-visual {
+  width: 100%; height: 100%;
+  transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+}
+.bento-item:hover .bento-visual { transform: scale(1.04); }
+
+.bento-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 24px 22px;
+  background: linear-gradient(to top, rgba(26,26,20,.85) 0%, transparent 100%);
+  transform: translateY(100%); transition: transform .45s cubic-bezier(.25,.46,.45,.94);
+}
+.bento-item:hover .bento-info { transform: translateY(0); }
+.bento-location {
+  font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 6px;
+}
+.bento-title {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  color: var(--white); margin-bottom: 4px;
+}
+.bento-meta { font-size: .6rem; color: rgba(245,240,232,.6); letter-spacing: .1em; }
+
+/* Category pill */
+.bento-cat {
+  position: absolute; top: 16px; left: 16px;
+  font-size: .5rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--white);
+  background: rgba(44,61,46,.85); padding: 5px 14px;
+  backdrop-filter: blur(8px);
+}
+
+/* CSS Property visuals */
+.prop-exterior {
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(245,240,232,.15) 0%, transparent 60%),
+    linear-gradient(160deg, #c8b89a 0%, #a89070 30%, #8a7258 60%, #5a4a38 100%);
+  position: relative;
+}
+.prop-exterior::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+  background:
+    /* windows */
+    radial-gradient(circle 4px at 20% 35%, rgba(255,240,180,.4) 0%, transparent 100%),
+    radial-gradient(circle 4px at 30% 35%, rgba(255,240,180,.4) 0%, transparent 100%),
+    radial-gradient(circle 4px at 20% 55%, rgba(255,240,180,.3) 0%, transparent 100%),
+    radial-gradient(circle 4px at 30% 55%, rgba(255,240,180,.3) 0%, transparent 100%),
+    radial-gradient(circle 4px at 65% 25%, rgba(255,240,180,.4) 0%, transparent 100%),
+    radial-gradient(circle 4px at 75% 25%, rgba(255,240,180,.4) 0%, transparent 100%),
+    linear-gradient(180deg, #4a3c2c 0%, #3a2c1c 100%);
+}
+.prop-living {
+  background: linear-gradient(140deg, #e8e0d4 0%, #d4c8b4 35%, #c0b09c 65%, #a89480 100%);
+  position: relative;
+}
+.prop-living::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 70%, rgba(184,146,74,.12) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 60% at 80% 40%, rgba(255,255,255,.25) 0%, transparent 50%);
+}
+/* furniture suggestion */
+.prop-living::after {
+  content: '';
+  position: absolute; bottom: 15%; left: 10%; right: 40%;
+  height: 18%; background: rgba(120,100,80,.3);
+  border-radius: 4px 4px 0 0;
+}
+.prop-kitchen {
+  background: linear-gradient(160deg, #f0ece4 0%, #e0d8cc 40%, #c8c0b4 70%, #b0a898 100%);
+  position: relative;
+}
+.prop-kitchen::before {
+  content: '';
+  position: absolute; top: 20%; left: 0; right: 0; height: 30%;
+  background:
+    linear-gradient(90deg,
+      #c8c0b0 0%, #c8c0b0 8%,
+      #d8d0c0 8%, #d8d0c0 9%,
+      #c8c0b0 9%, #c8c0b0 22%,
+      #d8d0c0 22%, #d8d0c0 23%,
+      #c8c0b0 23%, #c8c0b0 36%,
+      #d8d0c0 36%, #d8d0c0 37%,
+      #c8c0b0 37%, #c8c0b0 100%
+    );
+  opacity: .7;
+}
+.prop-aerial {
+  background:
+    linear-gradient(180deg, #8ab0a0 0%, #70908a 20%, #5a7870 40%, #4a6460 60%, #384c44 80%, #2a3830 100%);
+  position: relative; overflow: hidden;
+}
+/* pool */
+.prop-aerial::before {
+  content: '';
+  position: absolute; top: 35%; left: 20%; width: 35%; height: 20%;
+  background: linear-gradient(135deg, #7ab8d8 0%, #5a98c0 100%);
+  border-radius: 8px;
+  box-shadow: inset 0 0 20px rgba(0,100,180,.3);
+}
+/* paths & landscape shapes */
+.prop-aerial::after {
+  content: '';
+  position: absolute; top: 10%; right: 15%; width: 30%; height: 30%;
+  background: rgba(60,80,50,.6);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.prop-bathroom {
+  background: linear-gradient(150deg, #f4f0ec 0%, #e4e0d8 35%, #d0ccc4 70%, #bcb8b0 100%);
+  position: relative;
+}
+.prop-bathroom::before {
+  content: '';
+  position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
+  width: 50%; height: 30%;
+  background: linear-gradient(160deg, #c8c8c8 0%, #d8d8d8 50%, #b8b8b8 100%);
+  border-radius: 50% / 30%;
+}
+.prop-twilight {
+  background:
+    radial-gradient(ellipse 70% 50% at 70% 20%, rgba(255,180,80,.25) 0%, transparent 50%),
+    linear-gradient(170deg, #1a1a2a 0%, #2a1a18 30%, #3a2210 55%, #1c1810 100%);
+  position: relative;
+}
+.prop-twilight::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, #2c1e12 0%, #1a1208 100%);
+}
+/* lit windows */
+.prop-twilight::after {
+  content: '';
+  position: absolute; bottom: 15%; left: 5%; right: 5%;
+  height: 35%; background:
+    radial-gradient(ellipse 8px 6px at 20% 30%, rgba(255,210,100,.6) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 35% 30%, rgba(255,210,100,.5) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 65% 25%, rgba(255,210,100,.6) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 78% 25%, rgba(255,210,100,.5) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 20% 65%, rgba(255,190,80,.4) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 50% 60%, rgba(255,190,80,.5) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 6px at 75% 65%, rgba(255,190,80,.4) 0%, transparent 100%);
+}
+.prop-pool {
+  background:
+    linear-gradient(160deg, #5a98c0 0%, #4888b0 30%, #3878a0 60%, #2a6890 100%);
+  position: relative;
+}
+.prop-pool::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 30% at 40% 50%, rgba(150,220,255,.2) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,.04) 20px,
+      rgba(255,255,255,.04) 21px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,.04) 20px,
+      rgba(255,255,255,.04) 21px
+    );
+}
+.prop-pool::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(180deg, transparent 0%, rgba(20,60,90,.6) 100%);
+}
+
+/* ── SERVICES SECTION ── */
+.services-section {
+  padding: 100px 52px;
+  background: var(--forest);
+  position: relative; overflow: hidden;
+}
+.services-section::before {
+  content: '';
+  position: absolute; top: -100px; right: -100px;
+  width: 500px; height: 500px; border-radius: 50%;
+  border: 1px solid rgba(245,240,232,.04);
+}
+.services-section::after {
+  content: '';
+  position: absolute; bottom: -150px; left: -150px;
+  width: 600px; height: 600px; border-radius: 50%;
+  border: 1px solid rgba(245,240,232,.04);
+}
+.services-inner { position: relative; z-index: 2; }
+.services-header { margin-bottom: 70px; }
+.services-header .section-label { color: var(--gold-light); }
+.services-header .section-label::before { background: var(--gold-light); }
+.services-header .section-title { color: var(--white); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.service-card {
+  background: rgba(245,240,232,.04);
+  padding: 48px 40px;
+  border: 1px solid rgba(245,240,232,.06);
+  transition: background .4s, transform .4s;
+  position: relative; overflow: hidden;
+}
+.service-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s ease;
+}
+.service-card:hover { background: rgba(245,240,232,.07); transform: translateY(-4px); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem; font-weight: 900;
+  color: rgba(245,240,232,.08); line-height: 1;
+  margin-bottom: 20px;
+}
+.service-icon {
+  width: 44px; height: 44px; margin-bottom: 24px;
+  color: var(--gold-light);
+}
+.service-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem; color: var(--white);
+  margin-bottom: 16px; line-height: 1.2;
+}
+.service-desc {
+  font-size: .88rem; line-height: 1.85;
+  color: rgba(245,240,232,.55);
+}
+.service-price {
+  margin-top: 28px; padding-top: 20px;
+  border-top: 1px solid rgba(245,240,232,.1);
+  font-size: .65rem; font-weight: 500; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--gold-light);
+}
+
+/* ── ABOUT / PROCESS ── */
+.about-section {
+  padding: 120px 52px;
+  display: grid; grid-template-columns: 5fr 6fr;
+  gap: 80px; align-items: center;
+}
+.about-visual { position: relative; }
+.about-main-img {
+  width: 100%; aspect-ratio: 4/5;
+  position: relative; overflow: hidden;
+}
+.about-photo-bg {
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse 60% 50% at 40% 30%, rgba(200,180,140,.25) 0%, transparent 60%),
+    linear-gradient(160deg, #c8b090 0%, #a88c68 30%, #8a7050 60%, #6a5438 100%);
+  position: relative; overflow: hidden;
+}
+/* photographer silhouette */
+.photographer-svg {
+  position: absolute; bottom: 0; right: 10%;
+  width: 55%; opacity: .85;
+}
+.about-accent-block {
+  position: absolute; top: -24px; right: -24px;
+  width: 180px; height: 180px;
+  background: var(--cream-dark);
+  z-index: -1;
+}
+.about-badge-box {
+  position: absolute; bottom: -24px; left: -24px;
+  background: var(--white);
+  padding: 24px 28px;
+  box-shadow: 0 12px 40px var(--shadow);
+}
+.badge-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem; font-weight: 900; line-height: 1;
+  color: var(--ink); margin-bottom: 4px;
+}
+.badge-text { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--warm-gray); }
+
+.about-content { }
+.about-content .section-title { margin-bottom: 32px; }
+.about-bio {
+  font-size: 1.05rem; line-height: 1.9;
+  color: var(--warm-gray); margin-bottom: 24px;
+}
+.about-bio strong { color: var(--ink); font-weight: 500; }
+.process-steps { margin-top: 48px; }
+.process-step {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 20px; padding: 20px 0;
+  border-bottom: 1px solid rgba(26,26,20,.08);
+  align-items: start;
+}
+.process-step:last-child { border-bottom: none; }
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: .75rem; font-weight: 700;
+  color: var(--gold); padding-top: 4px;
+  letter-spacing: .1em;
+}
+.step-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem; color: var(--ink); margin-bottom: 6px;
+}
+.step-desc { font-size: .82rem; line-height: 1.7; color: var(--warm-gray); }
+
+/* ── FEATURED PROPERTY ── */
+.featured-section { padding: 0 52px 100px; }
+.featured-label { padding: 60px 0 40px; }
+.featured-showcase {
+  display: grid; grid-template-columns: 7fr 5fr;
+  background: var(--ink); min-height: 600px;
+}
+.feat-visual {
+  position: relative; overflow: hidden;
+}
+.feat-img {
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 20%, rgba(255,200,100,.12) 0%, transparent 50%),
+    linear-gradient(180deg, #2c2010 0%, #1c1408 30%, #2a2018 60%, #3a3020 100%);
+  position: relative; overflow: hidden;
+  transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+}
+.feat-visual:hover .feat-img { transform: scale(1.03); }
+/* luxe house at golden hour */
+.feat-img::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+  background: linear-gradient(180deg, #3c2c1a 0%, #2a1c0a 50%, #1a0e04 100%);
+}
+.feat-img::after {
+  content: '';
+  position: absolute; bottom: 20%; left: 5%; right: 5%; height: 35%;
+  background:
+    radial-gradient(ellipse 6px 5px at 12% 25%, rgba(255,210,100,.7) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 22% 25%, rgba(255,210,100,.6) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 35% 20%, rgba(255,210,100,.7) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 58% 20%, rgba(255,210,100,.65) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 70% 20%, rgba(255,210,100,.7) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 82% 25%, rgba(255,210,100,.6) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 12% 65%, rgba(255,190,80,.5) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 40% 60%, rgba(255,190,80,.6) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 68% 60%, rgba(255,190,80,.5) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 5px at 88% 65%, rgba(255,190,80,.5) 0%, transparent 100%);
+}
+.feat-sun-glow {
+  position: absolute; top: 5%; right: 20%;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,180,60,.5) 0%, rgba(255,140,30,.2) 40%, transparent 70%);
+  filter: blur(20px);
+}
+.feat-horizon {
+  position: absolute; top: 35%; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,160,40,.2), transparent);
+}
+
+.feat-info {
+  background: var(--white); padding: 56px 48px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.feat-tag {
+  font-size: .55rem; font-weight: 500; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.feat-tag::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+.feat-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3vw, 42px); font-weight: 700; line-height: 1.1;
+  color: var(--ink); margin-bottom: 8px;
+}
+.feat-location { font-size: .75rem; color: var(--warm-gray); letter-spacing: .1em; margin-bottom: 32px; }
+.feat-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+  padding: 24px 0; border-top: 1px solid var(--cream-dark);
+  border-bottom: 1px solid var(--cream-dark); margin-bottom: 32px;
+}
+.feat-stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1;
+  margin-bottom: 4px;
+}
+.feat-stat-label { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--warm-gray); }
+.feat-desc { font-size: .9rem; line-height: 1.85; color: var(--warm-gray); margin-bottom: 32px; }
+.feat-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* ── TESTIMONIALS ── */
+.testimonials-section {
+  padding: 100px 52px;
+  background: var(--cream-dark);
+}
+.testi-layout {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px; margin-top: 60px;
+}
+.testi-card {
+  background: var(--white); padding: 44px 36px;
+  transition: transform .35s ease;
+}
+.testi-card:nth-child(2) {
+  background: var(--forest); transform: translateY(-20px);
+}
+.testi-card:hover { transform: translateY(-8px); }
+.testi-card:nth-child(2):hover { transform: translateY(-28px); }
+.testi-stars { color: var(--gold); font-size: .9rem; letter-spacing: .1em; margin-bottom: 20px; }
+.testi-card:nth-child(2) .testi-stars { color: var(--gold-light); }
+.testi-quote {
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  font-size: 1.1rem; line-height: 1.65; color: var(--ink);
+  margin-bottom: 28px;
+}
+.testi-card:nth-child(2) .testi-quote { color: var(--white); }
+.testi-author { display: flex; align-items: center; gap: 14px; }
+.testi-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--cream-dark); overflow: hidden;
+  flex-shrink: 0;
+}
+.testi-card:nth-child(2) .testi-avatar { background: rgba(245,240,232,.15); }
+.testi-avatar-inner {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--sage), var(--forest));
+  display: flex; align-items: flex-end; justify-content: center;
+  overflow: hidden;
+}
+.testi-name { font-size: .8rem; font-weight: 500; color: var(--ink); }
+.testi-card:nth-child(2) .testi-name { color: var(--white); }
+.testi-role { font-size: .62rem; letter-spacing: .1em; color: var(--warm-gray); margin-top: 2px; }
+.testi-card:nth-child(2) .testi-role { color: rgba(245,240,232,.5); }
+
+/* ── STATS BANNER ── */
+.stats-banner {
+  background: var(--ink); padding: 70px 52px;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 0;
+}
+.stat-item {
+  padding: 0 48px; text-align: center;
+  border-right: 1px solid rgba(245,240,232,.07);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.8rem; font-weight: 900; line-height: 1;
+  background: linear-gradient(135deg, var(--white), var(--gold-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.stat-label { font-size: .6rem; font-weight: 400; letter-spacing: .25em; text-transform: uppercase; color: rgba(245,240,232,.4); }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 120px 52px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; right: -200px; top: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  border: 60px solid var(--cream-dark);
+}
+.cta-left { position: relative; z-index: 2; }
+.cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px,5vw,72px); font-weight: 900;
+  line-height: .95; margin-bottom: 28px;
+}
+.cta-title em { display: block; font-style: italic; color: var(--forest); font-weight: 400; }
+.cta-sub { font-size: 1rem; line-height: 1.85; color: var(--warm-gray); margin-bottom: 44px; }
+.cta-right { position: relative; z-index: 2; }
+.contact-form { display: flex; flex-direction: column; gap: 0; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.form-field {
+  position: relative; border: 1px solid rgba(26,26,20,.12);
+  margin: -1px 0 0 -1px;
+}
+.form-field input, .form-field select, .form-field textarea {
+  width: 100%; background: transparent; border: none; outline: none;
+  padding: 22px 20px 10px;
+  font-family: 'Jost', sans-serif; font-size: .9rem; font-weight: 300;
+  color: var(--ink); resize: none;
+  appearance: none;
+}
+.form-field label {
+  position: absolute; top: 14px; left: 20px;
+  font-size: .58rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--warm-gray);
+  pointer-events: none;
+  transition: color .3s;
+}
+.form-field:focus-within { border-color: var(--forest); z-index: 2; }
+.form-field:focus-within label { color: var(--forest); }
+.form-field.full { grid-column: 1 / -1; }
+.btn-submit {
+  font-size: .65rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--white);
+  background: var(--forest); border: none;
+  padding: 20px 40px; cursor: none;
+  align-self: flex-start;
+  margin-top: 20px;
+  transition: background .3s, transform .2s;
+}
+.btn-submit:hover { background: var(--gold); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink); padding: 60px 52px 40px;
+}
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px; padding-bottom: 50px;
+  border-bottom: 1px solid rgba(245,240,232,.07);
+}
+.footer-brand p {
+  font-size: .85rem; line-height: 1.8;
+  color: rgba(245,240,232,.45); margin-top: 16px; max-width: 260px;
+}
+.footer-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem; color: var(--white);
+}
+.footer-logo-text span { font-style: italic; color: var(--gold-light); }
+.footer-col h4 {
+  font-size: .58rem; font-weight: 500; letter-spacing: .3em;
+  text-transform: uppercase; color: rgba(245,240,232,.4);
+  margin-bottom: 20px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a {
+  font-size: .82rem; color: rgba(245,240,232,.55);
+  text-decoration: none; transition: color .3s;
+}
+.footer-col a:hover { color: var(--gold-light); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 28px;
+}
+.footer-copy { font-size: .6rem; letter-spacing: .1em; color: rgba(245,240,232,.25); }
+.footer-social { display: flex; gap: 24px; }
+.footer-social a {
+  font-size: .6rem; font-weight: 400; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(245,240,232,.35);
+  text-decoration: none; transition: color .3s;
+}
+.footer-social a:hover { color: var(--gold-light); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s ease, transform .9s ease; }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+.reveal-d4 { transition-delay: .4s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 960px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; height: auto; }
+  .hero-left { padding: 120px 24px 60px; }
+  .hero-right { height: 60vw; }
+  .hero-floating-card { left: 20px; bottom: 30px; }
+  .portfolio-section, .services-section, .about-section,
+  .featured-section, .testimonials-section, .cta-section { padding: 60px 24px; }
+  .bento { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .bento-item:nth-child(1) { grid-column: 1 / -1; }
+  .bento-item:nth-child(4), .bento-item:nth-child(5) { grid-column: span 1; }
+  .bento-item:nth-child(6) { grid-column: 1 / -1; }
+  .services-grid, .testi-layout { grid-template-columns: 1fr; }
+  .testi-card:nth-child(2) { transform: none; }
+  .stats-banner { grid-template-columns: 1fr 1fr; }
+  .about-section, .cta-section, .featured-showcase { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  footer { padding: 40px 24px 24px; }
+  .form-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
-
 <body>
 
-<header>
-    <h1>Akhil Photography</h1>
-    <p>Capturing moments. Creating memories.</p>
-</header>
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
 
-<section class="gallery">
-    <!-- Replace with your image links -->
-    <img src="https://picsum.photos/600/800?1" alt="Photo 1">
-    <img src="https://picsum.photos/600/800?2" alt="Photo 2">
-    <img src="https://picsum.photos/600/800?3" alt="Photo 3">
-    <img src="https://picsum.photos/600/800?4" alt="Photo 4">
-    <img src="https://picsum.photos/600/800?5" alt="Photo 5">
-    <img src="https://picsum.photos/600/800?6" alt="Photo 6">
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-logo">Marcus <span>Vane</span></a>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book a Session</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Architectural & Real Estate Photography</p>
+    <h1 class="hero-headline">Every Space<br>Has a <em>Story</em><br>Worth Telling</h1>
+    <p class="hero-desc">Award-winning real estate photographer based in Los Angeles — capturing the soul of architecture, the warmth of interiors, and the prestige of exceptional properties.</p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-fill">View Portfolio</a>
+      <a href="#services" class="btn-ghost">Explore Services</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Main hero visual: golden hour estate -->
+    <div class="hero-main-img">
+      <div style="width:100%;height:100%;background:
+        radial-gradient(ellipse 60% 40% at 60% 20%, rgba(255,180,60,.22) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 60% at 90% 80%, rgba(180,130,60,.12) 0%, transparent 50%),
+        linear-gradient(165deg, #e8d4b0 0%, #c8a878 25%, #a88050 50%, #8a6038 70%, #604020 100%);
+        position:relative;overflow:hidden;">
+        <!-- sky gradient -->
+        <div style="position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(180deg,#d4824020 0%,transparent 100%)"></div>
+        <!-- house roofline -->
+        <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;height:55%" viewBox="0 0 800 300" preserveAspectRatio="none">
+          <!-- main house body -->
+          <rect x="80" y="60" width="300" height="240" fill="#3a2810"/>
+          <!-- roof -->
+          <polygon points="60,60 230,0 400,60" fill="#2c1e0c"/>
+          <!-- right wing -->
+          <rect x="380" y="100" width="200" height="200" fill="#342210"/>
+          <!-- right roof -->
+          <polygon points="360,100 480,60 600,100" fill="#28180a"/>
+          <!-- garage -->
+          <rect x="580" y="150" width="150" height="150" fill="#2e1c0a"/>
+          <!-- windows lit up -->
+          <rect x="110" y="90" width="50" height="40" fill="rgba(255,210,100,.6)" rx="2"/>
+          <rect x="180" y="90" width="50" height="40" fill="rgba(255,210,100,.55)" rx="2"/>
+          <rect x="290" y="90" width="45" height="40" fill="rgba(255,200,90,.5)" rx="2"/>
+          <rect x="110" y="160" width="50" height="40" fill="rgba(255,200,80,.5)" rx="2"/>
+          <rect x="180" y="160" width="50" height="40" fill="rgba(255,200,80,.45)" rx="2"/>
+          <rect x="290" y="160" width="45" height="40" fill="rgba(255,210,100,.5)" rx="2"/>
+          <rect x="410" y="130" width="60" height="50" fill="rgba(255,200,80,.45)" rx="2"/>
+          <rect x="490" y="130" width="60" height="50" fill="rgba(255,210,100,.5)" rx="2"/>
+          <!-- door -->
+          <rect x="200" y="220" width="45" height="80" fill="#1c1006" rx="2"/>
+          <circle cx="238" cy="263" r="3" fill="rgba(255,200,80,.7)"/>
+          <!-- landscape -->
+          <rect x="0" y="270" width="800" height="30" fill="#1a1208"/>
+          <!-- driveway -->
+          <polygon points="220,300 260,200 320,200 360,300" fill="#241810" opacity=".6"/>
+          <!-- bushes -->
+          <ellipse cx="90" cy="280" rx="30" ry="18" fill="#2c3820"/>
+          <ellipse cx="600" cy="280" rx="35" ry="20" fill="#283018"/>
+          <ellipse cx="650" cy="278" rx="20" ry="15" fill="#303820"/>
+        </svg>
+        <!-- golden sun glow -->
+        <div style="position:absolute;top:8%;right:15%;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(255,180,60,.7) 0%,rgba(255,140,30,.3) 40%,transparent 70%);filter:blur(12px)"></div>
+      </div>
+    </div>
+
+    <div class="hero-floating-card">
+      <p class="hfc-label">Properties Sold</p>
+      <p class="hfc-value">2,400<span style="font-size:1rem">+</span></p>
+      <p class="hfc-sub">avg. 28% faster sell time</p>
+    </div>
+
+    <div class="hero-counter">
+      <div class="hero-counter-current">01</div>
+      <div class="hero-counter-total">— 12 Projects</div>
+    </div>
+  </div>
 </section>
 
-<section class="about">
-    <h2>About Me</h2>
-    <p>
-        Hi, I'm Akhil — a passionate photographer who loves capturing natural light, emotions,
-        and timeless moments. Specializing in portraits, events, and lifestyle photography.
-    </p>
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span class="marquee-item">Luxury Estates <span>·</span> Architectural Detail <span>·</span> Twilight Sessions <span>·</span> Aerial Photography <span>·</span> Virtual Staging <span>·</span> Interior Design <span>·</span> Commercial Spaces <span>·</span> Development Projects</span>
+    <span class="marquee-item">Luxury Estates <span>·</span> Architectural Detail <span>·</span> Twilight Sessions <span>·</span> Aerial Photography <span>·</span> Virtual Staging <span>·</span> Interior Design <span>·</span> Commercial Spaces <span>·</span> Development Projects</span>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<section class="portfolio-section" id="portfolio">
+  <div class="portfolio-header reveal">
+    <div>
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-title">Portfolio<br><em>Highlights</em></h2>
+    </div>
+    <div>
+      <div class="filter-tabs">
+        <button class="ftab active" onclick="setFilter(this)">All</button>
+        <button class="ftab" onclick="setFilter(this)">Exteriors</button>
+        <button class="ftab" onclick="setFilter(this)">Interiors</button>
+        <button class="ftab" onclick="setFilter(this)">Twilight</button>
+        <button class="ftab" onclick="setFilter(this)">Aerial</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bento reveal">
+    <!-- 1. Exterior - large -->
+    <div class="bento-item">
+      <div class="bento-visual prop-exterior" style="height:100%"></div>
+      <span class="bento-cat">Exterior</span>
+      <div class="bento-info">
+        <p class="bento-location">Beverly Hills, CA</p>
+        <p class="bento-title">The Harrington Estate</p>
+        <p class="bento-meta">8,400 sqft · Listed $12.5M · Sold in 11 days</p>
+      </div>
+    </div>
+
+    <!-- 2. Living Room -->
+    <div class="bento-item">
+      <div class="bento-visual prop-living" style="height:100%"></div>
+      <span class="bento-cat">Interior</span>
+      <div class="bento-info">
+        <p class="bento-location">Malibu, CA</p>
+        <p class="bento-title">Oceanfront Living</p>
+        <p class="bento-meta">Great room · Natural light session</p>
+      </div>
+    </div>
+
+    <!-- 3. Kitchen -->
+    <div class="bento-item">
+      <div class="bento-visual prop-kitchen" style="height:100%"></div>
+      <span class="bento-cat">Interior</span>
+      <div class="bento-info">
+        <p class="bento-location">Bel Air, CA</p>
+        <p class="bento-title">Chef's Kitchen</p>
+        <p class="bento-meta">Architectural Digest feature</p>
+      </div>
+    </div>
+
+    <!-- 4. Aerial -->
+    <div class="bento-item">
+      <div class="bento-visual prop-aerial" style="height:100%"></div>
+      <span class="bento-cat">Aerial</span>
+      <div class="bento-info">
+        <p class="bento-location">Santa Barbara, CA</p>
+        <p class="bento-title">Hilltop Compound</p>
+        <p class="bento-meta">FAA-certified drone · 1.2 acre lot</p>
+      </div>
+    </div>
+
+    <!-- 5. Twilight - tall -->
+    <div class="bento-item">
+      <div class="bento-visual prop-twilight" style="height:100%"></div>
+      <span class="bento-cat">Twilight</span>
+      <div class="bento-info">
+        <p class="bento-location">Pasadena, CA</p>
+        <p class="bento-title">Golden Hour Residence</p>
+        <p class="bento-meta">Blue hour · Long exposure</p>
+      </div>
+    </div>
+
+    <!-- 6. Pool / Outdoor -->
+    <div class="bento-item">
+      <div class="bento-visual prop-pool" style="height:100%"></div>
+      <span class="bento-cat">Lifestyle</span>
+      <div class="bento-info">
+        <p class="bento-location">Palm Springs, CA</p>
+        <p class="bento-title">Desert Oasis</p>
+        <p class="bento-meta">Mid-century modern · Infinity pool</p>
+      </div>
+    </div>
+
+    <!-- 7. Bathroom -->
+    <div class="bento-item">
+      <div class="bento-visual prop-bathroom" style="height:100%"></div>
+      <span class="bento-cat">Interior</span>
+      <div class="bento-info">
+        <p class="bento-location">Hollywood Hills, CA</p>
+        <p class="bento-title">Spa Master Bath</p>
+        <p class="bento-meta">Marble & glass · Natural + artificial light blend</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:akhil@email.com">akhil@email.com</a></p>
-    <p>Instagram: <a href="#">@akhil.photography</a></p>
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="services-inner">
+    <div class="services-header reveal">
+      <p class="section-label">What I Offer</p>
+      <h2 class="section-title" style="color:var(--white)">Photography<br><em style="color:rgba(245,240,232,.6)">Services</em></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <rect x="4" y="8" width="36" height="28" rx="2"/>
+          <circle cx="22" cy="22" r="8"/>
+          <circle cx="22" cy="22" r="4"/>
+          <circle cx="34" cy="12" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+        <h3 class="service-name">Residential Photography</h3>
+        <p class="service-desc">Full-property coverage capturing every room with precision lighting. HDR blending, sky replacement, and same-day delivery for active listings.</p>
+        <p class="service-price">Starting from $350 · 24hr turnaround</p>
+      </div>
+      <div class="service-card reveal reveal-d1">
+        <div class="service-num">02</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M6 36 L6 16 L22 6 L38 16 L38 36"/>
+          <rect x="14" y="22" width="8" height="14"/>
+          <rect x="24" y="18" width="10" height="10"/>
+          <line x1="6" y1="36" x2="38" y2="36"/>
+        </svg>
+        <h3 class="service-name">Architectural Exteriors</h3>
+        <p class="service-desc">Dramatic wide-angle exteriors showcasing architectural character. We schedule for optimal natural light and can blend with golden hour sky replacements.</p>
+        <p class="service-price">Starting from $500 · Weather guarantee</p>
+      </div>
+      <div class="service-card reveal reveal-d2">
+        <div class="service-num">03</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="22" cy="14" r="8"/>
+          <path d="M8 38 C8 30 14 26 22 26 C30 26 36 30 36 38"/>
+          <line x1="30" y1="20" x2="40" y2="12"/>
+          <circle cx="40" cy="10" r="3"/>
+        </svg>
+        <h3 class="service-name">Twilight Sessions</h3>
+        <p class="service-desc">The blue hour window delivers the most emotional, magazine-quality results. Interior warmth against dusky skies creates irresistible listing imagery.</p>
+        <p class="service-price">Starting from $650 · 45-min golden window</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M22 4 L38 22 L22 40 L6 22 Z"/>
+          <circle cx="22" cy="22" r="6"/>
+          <line x1="22" y1="4" x2="22" y2="16"/>
+          <line x1="22" y1="28" x2="22" y2="40"/>
+          <line x1="6" y1="22" x2="16" y2="22"/>
+          <line x1="28" y1="22" x2="38" y2="22"/>
+        </svg>
+        <h3 class="service-name">Aerial & Drone</h3>
+        <p class="service-desc">FAA Part 107 certified. Show lot lines, neighborhood context, pool and outdoor entertaining areas. Cinematic video also available.</p>
+        <p class="service-price">Starting from $400 · FAA compliant</p>
+      </div>
+      <div class="service-card reveal reveal-d1">
+        <div class="service-num">05</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <rect x="4" y="12" width="36" height="24" rx="2"/>
+          <polyline points="14,12 14,8 30,8 30,12"/>
+          <line x1="4" y1="20" x2="40" y2="20"/>
+          <circle cx="22" cy="30" r="4"/>
+        </svg>
+        <h3 class="service-name">Virtual Staging</h3>
+        <p class="service-desc">Transform vacant spaces into aspirationally furnished rooms. Multiple style palettes available — modern, transitional, coastal, and luxury contemporary.</p>
+        <p class="service-price">Starting from $80/room · 48hr delivery</p>
+      </div>
+      <div class="service-card reveal reveal-d2">
+        <div class="service-num">06</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M8 36 L8 10 L24 4 L40 10 L40 36 L8 36"/>
+          <rect x="16" y="22" width="12" height="14"/>
+          <rect x="14" y="14" width="6" height="6"/>
+          <rect x="24" y="14" width="6" height="6"/>
+        </svg>
+        <h3 class="service-name">Development Projects</h3>
+        <p class="service-desc">Multi-unit residential and commercial developments. Progress photography, marketing renders, and complete launch packages for developers and builders.</p>
+        <p class="service-price">Custom packages · Volume discounts</p>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- FEATURED PROPERTY -->
+<div class="featured-section">
+  <div class="featured-label reveal">
+    <p class="section-label">Case Study</p>
+    <h2 class="section-title">Featured <em>Project</em></h2>
+  </div>
+  <div class="featured-showcase reveal">
+    <div class="feat-visual">
+      <div class="feat-img">
+        <div class="feat-sun-glow"></div>
+        <div class="feat-horizon"></div>
+      </div>
+    </div>
+    <div class="feat-info">
+      <p class="feat-tag">Luxury Estate · Beverly Hills</p>
+      <h3 class="feat-title">The Whitmore<br>Manor</h3>
+      <p class="feat-location">1420 Cielo Drive, Beverly Hills, CA 90210</p>
+      <div class="feat-stats">
+        <div>
+          <p class="feat-stat-val">$18.5M</p>
+          <p class="feat-stat-label">List Price</p>
+        </div>
+        <div>
+          <p class="feat-stat-val">7 Days</p>
+          <p class="feat-stat-label">Days on Market</p>
+        </div>
+        <div>
+          <p class="feat-stat-val">14,200</p>
+          <p class="feat-stat-label">Square Feet</p>
+        </div>
+        <div>
+          <p class="feat-stat-val">312k</p>
+          <p class="feat-stat-label">Photo Views</p>
+        </div>
+      </div>
+      <p class="feat-desc">A twilight-to-dusk full-day session capturing 6 bedrooms, formal living areas, a resort-style pool deck, and the dramatic motor court approach. The images were featured in Architectural Digest's luxury sales roundup and contributed to a full-ask offer within the first week.</p>
+      <div class="feat-cta">
+        <a href="#contact" class="btn-fill">Book Similar Session</a>
+        <a href="#portfolio" class="btn-ghost">View Full Series</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT / PROCESS -->
+<section class="about-section" id="about">
+  <div class="about-visual reveal">
+    <div class="about-accent-block"></div>
+    <div class="about-main-img">
+      <div class="about-photo-bg">
+        <!-- Photographer with camera -->
+        <svg class="photographer-svg" viewBox="0 0 200 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- tripod -->
+          <line x1="100" y1="180" x2="40" y2="380" stroke="rgba(26,20,10,0.6)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="100" y1="180" x2="100" y2="380" stroke="rgba(26,20,10,0.6)" stroke-width="5"/>
+          <line x1="100" y1="180" x2="160" y2="380" stroke="rgba(26,20,10,0.6)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="55" y1="310" x2="145" y2="310" stroke="rgba(26,20,10,0.4)" stroke-width="3"/>
+          <!-- camera body -->
+          <rect x="72" y="155" width="56" height="35" rx="4" fill="rgba(26,20,10,0.75)"/>
+          <rect x="78" y="145" width="20" height="14" rx="2" fill="rgba(26,20,10,0.65)"/>
+          <!-- lens -->
+          <ellipse cx="100" cy="172" rx="14" ry="14" fill="rgba(26,20,10,0.85)"/>
+          <ellipse cx="100" cy="172" rx="9" ry="9" fill="rgba(30,30,50,0.8)"/>
+          <ellipse cx="100" cy="172" rx="5" ry="5" fill="rgba(40,40,60,0.7)"/>
+          <!-- body -->
+          <ellipse cx="100" cy="120" rx="22" ry="26" fill="rgba(26,20,10,0.7)"/>
+          <path d="M78,146 Q60,180 55,240 Q75,235 80,210 Q90,240 100,250 Q110,240 120,210 Q125,235 145,240 Q140,180 122,146 Z" fill="rgba(26,20,10,0.7)"/>
+          <line x1="78" y1="165" x2="44" y2="200" stroke="rgba(26,20,10,0.6)" stroke-width="10" stroke-linecap="round"/>
+          <line x1="122" y1="158" x2="138" y2="142" stroke="rgba(26,20,10,0.6)" stroke-width="10" stroke-linecap="round"/>
+        </svg>
+        <!-- bokeh overlay -->
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,220,150,.2) 0%,transparent 40%)"></div>
+      </div>
+    </div>
+    <div class="about-badge-box">
+      <p class="badge-num">12+</p>
+      <p class="badge-text">Years Shooting</p>
+    </div>
+  </div>
+
+  <div class="about-content reveal reveal-d2" id="about">
+    <p class="section-label">The Photographer</p>
+    <h2 class="section-title">Marcus<br><em>Vane</em></h2>
+    <p class="about-bio">I've spent over a decade learning that <strong>great real estate photography isn't about capturing rooms</strong> — it's about capturing the feeling of a life that could be lived there.</p>
+    <p class="about-bio">Based in Los Angeles and working across California, I partner with the region's top brokers, interior designers, and developers to produce imagery that drives results. My work has been featured in <strong>Architectural Digest, Forbes, and The Wall Street Journal</strong>.</p>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <span class="step-num">01</span>
+        <div>
+          <p class="step-title">Pre-Shoot Consultation</p>
+          <p class="step-desc">We review floor plans, discuss the property's strongest selling points, and create a shot list that tells a complete story.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-num">02</span>
+        <div>
+          <p class="step-title">Day-of Lighting & Staging Review</p>
+          <p class="step-desc">Arrival 30 minutes early to assess natural light, adjust furniture, and ensure every surface is camera-ready.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-num">03</span>
+        <div>
+          <p class="step-title">Professional Post-Processing</p>
+          <p class="step-desc">HDR blending, sky replacement, lens correction, and color grading performed to MLS and luxury publishing standards.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="step-num">04</span>
+        <div>
+          <p class="step-title">Delivery & Licensing</p>
+          <p class="step-desc">High-resolution files delivered via private gallery within 24 hours. Full MLS licensing included; print licensing available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="reveal">
+    <p class="section-label">Client Reviews</p>
+    <h2 class="section-title">What Agents<br><em>Are Saying</em></h2>
+  </div>
+  <div class="testi-layout">
+    <div class="testi-card reveal">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-quote">"Marcus's twilight shots of our Beverly Hills listing stopped buyers mid-scroll. We received three offers above ask before the open house."</p>
+      <div class="testi-author">
+        <div class="testi-avatar"><div class="testi-avatar-inner">
+          <svg width="44" height="44" viewBox="0 0 44 44"><ellipse cx="22" cy="16" rx="9" ry="10" fill="rgba(255,255,255,.4)"/><path d="M6 44 C6 32 12 28 22 28 C32 28 38 32 38 44" fill="rgba(255,255,255,.4)"/></svg>
+        </div></div>
+        <div>
+          <p class="testi-name">Jennifer Caldwell</p>
+          <p class="testi-role">Senior Agent · The Agency, Beverly Hills</p>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-d1">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-quote">"In 15 years of real estate, these are the best property images I've ever used. The attention to light and composition is simply unmatched."</p>
+      <div class="testi-author">
+        <div class="testi-avatar"><div class="testi-avatar-inner">
+          <svg width="44" height="44" viewBox="0 0 44 44"><ellipse cx="22" cy="16" rx="9" ry="10" fill="rgba(255,255,255,.3)"/><path d="M6 44 C6 32 12 28 22 28 C32 28 38 32 38 44" fill="rgba(255,255,255,.3)"/></svg>
+        </div></div>
+        <div>
+          <p class="testi-name">David Park</p>
+          <p class="testi-role">Principal Broker · Compass, Malibu</p>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-d2">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-quote">"Our development sold 40% of units within the first two weeks of launch — the photography created a lifestyle narrative buyers connected with immediately."</p>
+      <div class="testi-author">
+        <div class="testi-avatar"><div class="testi-avatar-inner">
+          <svg width="44" height="44" viewBox="0 0 44 44"><ellipse cx="22" cy="16" rx="9" ry="10" fill="rgba(255,255,255,.4)"/><path d="M6 44 C6 32 12 28 22 28 C32 28 38 32 38 44" fill="rgba(255,255,255,.4)"/></svg>
+        </div></div>
+        <div>
+          <p class="testi-name">Sarah Okonkwo</p>
+          <p class="testi-role">CEO · Meridian Development Group</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-banner reveal">
+  <div class="stat-item">
+    <p class="stat-num">2,400</p>
+    <p class="stat-label">Properties Shot</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">$4.2B</p>
+    <p class="stat-label">Total Sales Value</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">98%</p>
+    <p class="stat-label">Client Retention</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">28%</p>
+    <p class="stat-label">Faster Sell Time</p>
+  </div>
+</div>
+
+<!-- CTA / CONTACT -->
+<section class="cta-section" id="contact">
+  <div class="cta-left">
+    <p class="section-label">Let's Work Together</p>
+    <h2 class="cta-title">Book Your<br><em>Session</em></h2>
+    <p class="cta-sub">Tell me about your property and I'll put together a tailored photography package. Most sessions are available within 48 hours.</p>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:36px;height:36px;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5 19.79 19.79 0 012 5.18C2 4.055 2.825 3.12 3.945 3H6.94a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div>
+          <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--warm-gray)">Phone</p>
+          <p style="font-size:.9rem;color:var(--ink)">(310) 555-0182</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:36px;height:36px;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--warm-gray)">Email</p>
+          <p style="font-size:.9rem;color:var(--ink)">hello@marcusvane.com</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:36px;height:36px;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <p style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--warm-gray)">Location</p>
+          <p style="font-size:.9rem;color:var(--ink)">Los Angeles & Greater CA</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-right reveal reveal-d2">
+    <form class="contact-form" onsubmit="return false">
+      <div class="form-row">
+        <div class="form-field">
+          <label>First Name</label>
+          <input type="text" placeholder=" ">
+        </div>
+        <div class="form-field">
+          <label>Last Name</label>
+          <input type="text" placeholder=" ">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" placeholder=" ">
+        </div>
+        <div class="form-field">
+          <label>Phone</label>
+          <input type="tel" placeholder=" ">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field full">
+          <label>Service Type</label>
+          <select>
+            <option value="" disabled selected></option>
+            <option>Residential Photography</option>
+            <option>Exterior & Architectural</option>
+            <option>Twilight Session</option>
+            <option>Aerial / Drone</option>
+            <option>Virtual Staging</option>
+            <option>Development Project</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field full">
+          <label>Property Address</label>
+          <input type="text" placeholder=" ">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field full">
+          <label>Additional Notes</label>
+          <textarea rows="3" placeholder=" "></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn-submit">Request a Quote →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-    © 2026 Akhil Photography. All rights reserved.
+  <div class="footer-top">
+    <div class="footer-brand">
+      <p class="footer-logo-text">Marcus <span>Vane</span></p>
+      <p>Architectural & real estate photography serving luxury brokerages, interior designers, and developers across California since 2012.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Residential</a></li>
+        <li><a href="#">Exteriors</a></li>
+        <li><a href="#">Twilight</a></li>
+        <li><a href="#">Drone / Aerial</a></li>
+        <li><a href="#">Virtual Staging</a></li>
+        <li><a href="#">Commercial</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Portfolio</h4>
+      <ul>
+        <li><a href="#">Luxury Estates</a></li>
+        <li><a href="#">Interiors</a></li>
+        <li><a href="#">Developments</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <ul>
+        <li><a href="#">About Marcus</a></li>
+        <li><a href="#">Process</a></li>
+        <li><a href="#">Licensing</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Marcus Vane Photography · Los Angeles, CA</p>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Houzz</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">MLS Portfolio</a>
+    </div>
+  </div>
 </footer>
 
+<script>
+// ── CURSOR
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorOutline');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+(function moveCursor() {
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  rx += (mx - rx) * .14; ry += (my - ry) * .14;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(moveCursor);
+})();
+
+document.querySelectorAll('a, button, .bento-item, .service-card, .ftab').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('expanded'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('expanded'));
+});
+
+// ── SCROLL REVEAL
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }});
+}, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── FILTER TABS (visual only)
+function setFilter(btn) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  // pulse bento to hint at interactivity
+  const bento = document.querySelector('.bento');
+  bento.style.opacity = '0.6';
+  bento.style.transition = 'opacity .3s';
+  setTimeout(() => { bento.style.opacity = '1'; }, 300);
+}
+window.setFilter = setFilter;
+
+// ── PARALLAX HERO
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  const heroRight = document.querySelector('.hero-right');
+  if (heroRight && sy < window.innerHeight) {
+    heroRight.style.transform = `translateY(${sy * 0.15}px)`;
+  }
+});
+
+// ── COUNTER ANIMATION
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const text = el.textContent;
+    const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+    const suffix = text.replace(/[0-9.]/g, '');
+    if (isNaN(num)) return;
+    let start = 0; const duration = 1800;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = (Math.floor(ease * num * 10) / 10) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = text;
+    };
+    requestAnimationFrame(step);
+  });
+}
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); statsObs.disconnect(); }
+}, { threshold: .5 });
+const statsBanner = document.querySelector('.stats-banner');
+if (statsBanner) statsObs.observe(statsBanner);
+</script>
 </body>
 </html>
