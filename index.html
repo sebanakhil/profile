@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akhil Photography</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #111;
+        color: white;
+        text-align: center;
+    }
+
+    header {
+        padding: 40px 20px;
+        background: black;
+    }
+
+    header h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        letter-spacing: 2px;
+    }
+
+    header p {
+        color: #ccc;
+        margin-top: 10px;
+    }
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .gallery img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+        transform: scale(1.05);
+    }
+
+    .about {
+        padding: 40px 20px;
+        background: #1a1a1a;
+    }
+
+    .contact {
+        padding: 40px 20px;
+    }
+
+    .contact a {
+        color: #00bfff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    footer {
+        padding: 20px;
+        background: black;
+        color: #777;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Akhil Photography</h1>
+    <p>Capturing moments. Creating memories.</p>
+</header>
+
+<section class="gallery">
+    <!-- Replace with your image links -->
+    <img src="https://picsum.photos/600/800?1" alt="Photo 1">
+    <img src="https://picsum.photos/600/800?2" alt="Photo 2">
+    <img src="https://picsum.photos/600/800?3" alt="Photo 3">
+    <img src="https://picsum.photos/600/800?4" alt="Photo 4">
+    <img src="https://picsum.photos/600/800?5" alt="Photo 5">
+    <img src="https://picsum.photos/600/800?6" alt="Photo 6">
+</section>
+
+<section class="about">
+    <h2>About Me</h2>
+    <p>
+        Hi, I'm Akhil — a passionate photographer who loves capturing natural light, emotions,
+        and timeless moments. Specializing in portraits, events, and lifestyle photography.
+    </p>
+</section>
+
+<section class="contact">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:akhil@email.com">akhil@email.com</a></p>
+    <p>Instagram: <a href="#">@akhil.photography</a></p>
+</section>
+
+<footer>
+    © 2026 Akhil Photography. All rights reserved.
+</footer>
+
+</body>
+</html>
